@@ -1,0 +1,22 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DigDugComp376", "DigDugComp376\DigDugComp376.shproj", "{270B38A0-01B7-43B9-90E9-E2DCB8D3F1ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigDugComp376.Desktop", "DigDugComp376.Desktop\DigDugComp376.Desktop.csproj", "{5FCAEC21-FA9F-4FC2-9215-DE2C051C90C4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AnyCPU = Debug|AnyCPU
+		Release|AnyCPU = Release|AnyCPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{270B38A0-01B7-43B9-90E9-E2DCB8D3F1ED}.Debug|AnyCPU.ActiveCfg = Debug
+		{270B38A0-01B7-43B9-90E9-E2DCB8D3F1ED}.Debug|AnyCPU.Build.0 = Debug
+		{270B38A0-01B7-43B9-90E9-E2DCB8D3F1ED}.Release|AnyCPU.ActiveCfg = Release
+		{270B38A0-01B7-43B9-90E9-E2DCB8D3F1ED}.Release|AnyCPU.Build.0 = Release
+		{5FCAEC21-FA9F-4FC2-9215-DE2C051C90C4}.Debug|AnyCPU.ActiveCfg = Debug|Any CPU
+		{5FCAEC21-FA9F-4FC2-9215-DE2C051C90C4}.Debug|AnyCPU.Build.0 = Debug|Any CPU
+		{5FCAEC21-FA9F-4FC2-9215-DE2C051C90C4}.Release|AnyCPU.ActiveCfg = Release|Any CPU
+		{5FCAEC21-FA9F-4FC2-9215-DE2C051C90C4}.Release|AnyCPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
