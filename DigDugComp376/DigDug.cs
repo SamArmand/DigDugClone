@@ -11,7 +11,18 @@ namespace DigDugComp376
 
         internal Vector2 OriginalPosition;
 
-        const byte Speed = 2;
+		internal enum Direction
+		{
+			Up,
+			Down,
+			Left,
+			Right
+		}
+
+		const byte Speed = 2;
+
+		const short StartPositionX = 504,
+					StartPositionY = 336;
 
 		readonly Stopwatch _stopwatch = new Stopwatch();
 
@@ -24,15 +35,9 @@ namespace DigDugComp376
                            _hoseRectangleLeft = new Rectangle(0, 0, 56, 56),
                            _hoseRectangleRight = new Rectangle(56, 0, 56, 56);
 
-        const short StartPositionX = 504,
-                    StartPositionY = 336;
+		Direction _direction;
 
-        bool _isUp,
-             _isDown,
-             _isLeft,
-             _isRight;
-
-        internal DigDug() : base(Game1.DigDugTexture)
+		internal DigDug() : base(Game1.DigDugTexture)
         {
             OriginalPosition = new Vector2(StartPositionX,StartPositionY);
             Visible = true;
@@ -43,56 +48,44 @@ namespace DigDugComp376
 
         internal void Update()
         {
-            var keyboardState = Keyboard.GetState();
+			var keyboardState = Keyboard.GetState();
 
             var (x, y) = Position;
 
 			if (keyboardState.IsKeyDown(Keys.Space))
             {
-                if (_isLeft)
-                {
-                    Hose.Source = _hoseRectangleLeft;
-                    Hose.Position.Y = y;
-                    Hose.Position.X = x - 56;
-                }
-
-                else if (_isRight)
-                {
-                    Hose.Source = _hoseRectangleRight;
-                    Hose.Position.Y = y;
-                    Hose.Position.X = x + 56;
-                }
-
-                else if (_isUp)
-                {
-                    Hose.Source = _hoseRectangleUp;
-                    Hose.Position.Y = y - 56;
-                    Hose.Position.X = x;
-                }
-
-                else if (_isDown)
-                {
-                    Hose.Source = _hoseRectangleDown;
-                    Hose.Position.Y = y + 56;
-                    Hose.Position.X = x;
-                }
-            }
+				switch (_direction)
+				{
+					case Direction.Left:
+						Hose.Source = _hoseRectangleLeft;
+						Hose.Position.Y = y;
+						Hose.Position.X = x - 56;
+						break;
+					case Direction.Right:
+						Hose.Source = _hoseRectangleRight;
+						Hose.Position.Y = y;
+						Hose.Position.X = x + 56;
+						break;
+					case Direction.Up:
+						Hose.Source = _hoseRectangleUp;
+						Hose.Position.Y = y - 56;
+						Hose.Position.X = x;
+						break;
+					case Direction.Down:
+						Hose.Source = _hoseRectangleDown;
+						Hose.Position.Y = y + 56;
+						Hose.Position.X = x;
+						break;
+				}
+			}
 
             else if (keyboardState.IsKeyDown(Keys.Left))
             {
-                if (Math.Abs(y % 56) > 0)
-                {
-                    if (_isUp) Position.Y -= Speed;
+				if (Math.Abs(y % 56) > 0) Position.Y += Speed * (_direction == Direction.Up ? -1 : _direction == Direction.Down ? 1 : 0);
 
-                    else if (_isDown) Position.Y += Speed;
-                }
-
-                else
+				else
                 {
-                    _isLeft = true;
-                    _isRight = false;
-                    _isUp = false;
-                    _isDown = false;
+					_direction = Direction.Left;
                     Position.X -= Speed;
                     Source = _rectangleLeft;
                 }
@@ -102,19 +95,11 @@ namespace DigDugComp376
 
             else if (keyboardState.IsKeyDown(Keys.Right))
             {
-                if (Math.Abs(y % 56) > 0)
-                {
-                    if (_isUp) Position.Y -= Speed;
-
-                    else if (_isDown) Position.Y += Speed;
-                }
+				if (Math.Abs(y % 56) > 0) Position.Y += Speed * (_direction == Direction.Up ? -1 : _direction == Direction.Down ? 1 : 0);
 
                 else
                 {
-                    _isLeft = false;
-                    _isRight = true;
-                    _isUp = false;
-                    _isDown = false;
+					_direction = Direction.Right;
                     Position.X += Speed;
                     Source = _rectangleRight;
                 }
@@ -124,46 +109,30 @@ namespace DigDugComp376
 
             else if (keyboardState.IsKeyDown(Keys.Up))
             {
-                if (Math.Abs(x % 56) > 0)
-                {
-                    if (_isLeft) Position.X -= Speed;
+				if (Math.Abs(x % 56) > 0) Position.X += Speed * (_direction == Direction.Left ? -1 : _direction == Direction.Right ? 1 : 0);
 
-                    else if (_isRight) Position.X += Speed;
-                }
+				else
+				{
+					_direction = Direction.Up;
+					Position.Y -= Speed;
+					Source = _rectangleUp;
+				}
 
-                else
-                {
-                    _isLeft = false;
-                    _isRight = false;
-                    _isUp = true;
-                    _isDown = false;
-                    Position.Y -= Speed;
-                    Source = _rectangleUp;
-                }
-
-                Walk();
+				Walk();
             }
 
             else if (keyboardState.IsKeyDown(Keys.Down))
             {
-                if (Math.Abs(x % 56) > 0)
-                {
-                    if (_isLeft) Position.X -= Speed;
+				if (Math.Abs(x % 56) > 0) Position.X += Speed * (_direction == Direction.Left ? -1 : _direction == Direction.Right ? 1 : 0);
 
-                    else if (_isRight) Position.X += Speed;
-                }
+				else
+				{
+					_direction = Direction.Down;
+					Position.Y += Speed;
+					Source = _rectangleDown;
+				}
 
-                else
-                {
-                    _isLeft = false;
-                    _isRight = false;
-                    _isUp = false;
-                    _isDown = true;
-                    Position.Y += Speed;
-                    Source = _rectangleDown;
-                }
-
-                Walk();
+				Walk();
             }
 
             var (x1, y1) = Position;
@@ -174,11 +143,22 @@ namespace DigDugComp376
 
         internal void GoBack()
         {
-            if (_isLeft) Position.X += Speed;
-            else if (_isRight) Position.X -= Speed;
-            else if (_isUp) Position.Y += Speed;
-            else if (_isDown) Position.Y -= Speed;
-        }
+			switch (_direction)
+			{
+				case Direction.Left:
+					Position.X += Speed;
+					break;
+				case Direction.Right:
+					Position.X -= Speed;
+					break;
+				case Direction.Up:
+					Position.Y += Speed;
+					break;
+				case Direction.Down:
+					Position.Y -= Speed;
+					break;
+			}
+		}
 
         internal void Reset()
         {
@@ -197,6 +177,7 @@ namespace DigDugComp376
                 Source.Y = 174;
                 _stopwatch.Restart();
             }
+
             else if (elapsed >= 250) Source.Y = 264;
         }
     }

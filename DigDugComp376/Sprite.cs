@@ -18,7 +18,7 @@ namespace DigDugComp376
 		internal bool Visible,
 					  Flip;
 
-		static readonly RandomNumberGenerator Rand = RandomNumberGenerator.Create();
+		protected readonly Random Random = new Random();
 
 		internal Sprite(Texture2D spriteTexture) => _spriteTexture = spriteTexture;
 
@@ -39,19 +39,8 @@ namespace DigDugComp376
 		/// Draw the sprite to the screen
 		/// </summary>
 		internal void Draw()
-        {
-			if (Visible) Game1.SpriteBatch.Draw(_spriteTexture, Position, Source, Color.White, 0.0f, Vector2.Zero, 1.0f, Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
-        }
-
-		protected static int RandomNext(int min, int max)
 		{
-			if (min > max) throw new ArgumentOutOfRangeException(nameof(min));
-
-			var bytes = new byte[4];
-
-			Rand.GetBytes(bytes);
-
-			return (int)(BitConverter.ToUInt32(bytes, 0) % (max - min) + min);
+			if (Visible) Game1.SpriteBatch.Draw(_spriteTexture, Position, Source, Color.White, 0.0f, Vector2.Zero, 1.0f, Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
 		}
     }
 }

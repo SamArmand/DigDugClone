@@ -27,35 +27,18 @@ namespace DigDugComp376
 
 		internal static readonly Stopwatch Stopwatch = new Stopwatch();
 
-        internal static int Score,
-							DeadMonsters;
+		internal static ushort Score;
 
-		const int PookaMultiplier = 1,
+		internal static byte DeadMonsters;
+
+		const byte PookaMultiplier = 1,
 				  FygarMultiplier = 2;
-
-		const SpriteSortMode SpriteSortMode = Microsoft.Xna.Framework.Graphics.SpriteSortMode.Immediate;
-
-		const Monster.State Walking = Monster.State.Walking,
-							Dragon = Monster.State.Dragon,
-							Dead = Monster.State.Dead;
-
-		const Rock.State Stationary = Rock.State.Stationary,
-						 Rumbling = Rock.State.Rumbling,
-						 Falling = Rock.State.Falling;
-
-		readonly Color _black = Color.Black,
-					   _white = Color.White,
-					   _green = Color.Green;
-
-		readonly Matrix _matrix = Matrix.CreateScale(0.75f);
-
-		readonly SamplerState _samplerState = SamplerState.PointClamp;
-
+			
 		readonly GraphicsDeviceManager _graphicsDeviceManager;
 
 		readonly Vector2 _sidebarVector = new Vector2(1064, 56);
 
-		int _levelnum,
+		byte _levelnum,
 			_lives;
 
 		bool _win,
@@ -208,8 +191,8 @@ namespace DigDugComp376
 				{
 					var monsterState = monster.CurrentState;
 
-					if ((monsterState == Walking
-						|| monsterState == Dragon) && DigDug.Collides(monster)
+					if ((monsterState == Monster.State.Walking
+						|| monsterState == Monster.State.Dragon) && DigDug.Collides(monster)
 						|| DigDug.Collides(monster.Fire)) Die();
 					else monster.Update();
 				}
@@ -223,25 +206,27 @@ namespace DigDugComp376
 					if (DigDug.Collides(rock))
 						switch (rockState)
 						{
-							case Stationary:
-							case Rumbling:
+							case Rock.State.Stationary:
+							case Rock.State.Rumbling:
 								DigDug.GoBack();
 								break;
-							case Falling:
+							case Rock.State.Falling:
 								Die();
 								break;
 						}
 
-					foreach (var monster in _monsters.Where(monster => rockState == Falling && monster.Collides(rock) && monster.CurrentState != Dead)) monster.Die(2);
+					foreach (var monster in _monsters.Where(monster => rockState == Rock.State.Falling && monster.Collides(rock) && monster.CurrentState != Monster.State.Dead)) monster.Die(2);
                 }
 
 				if (DeadMonsters == _monsters.Length)
 				{
 					//Win!
+					_monsters = new Monster[] { };
 
 					_pause = true;
 
 					DigDug.Position = DigDug.OriginalPosition;
+					DigDug.Hose.Visible = false;
 
 					foreach (var rock in _rocks) rock.Reset();
 
@@ -253,7 +238,7 @@ namespace DigDugComp376
 
 					else
 					{
-						_win   = true;
+						_win = true;
 						_pause = true;
 					}
 				}
@@ -268,9 +253,9 @@ namespace DigDugComp376
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(_black);
+            GraphicsDevice.Clear(Color.Black);
 
-            SpriteBatch.Begin(SpriteSortMode, null, _samplerState, null, null, null, _matrix);
+            SpriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(0.75f));
 
             var bound0 = Level.GetUpperBound(0);
             var bound1 = Level.GetUpperBound(1);
@@ -282,7 +267,7 @@ namespace DigDugComp376
 				{
 					if (Math.Abs(x - i * 56) <= 0 && Math.Abs(y - j * 56) <= 0) Level[i, j] = 0;
 					var block = Level[i, j];
-					if (block > 0) SpriteBatch.Draw(_levelTiles[block - 1], new Vector2(i, j) * 56, _white);
+					if (block > 0) SpriteBatch.Draw(_levelTiles[block - 1], new Vector2(i, j) * 56, Color.White);
 				}
 
 			DigDug.Draw();
@@ -301,7 +286,7 @@ namespace DigDugComp376
 									"Score: " + Score +
 									"\n\n\n\nLevel: " + _levelnum + "\n\n\n\n" +
 									(_win ? "YOU WIN!!!" : _lives == 0 ? "GAME OVER" : "Lives: " + _lives) +
-									(_pause ? "\n\n\n\nHIT ENTER\nTO " + (_new ? "START" : "RESUME") : ""), _sidebarVector, _green);
+									(_pause ? "\n\n\n\nHIT ENTER\nTO " + (_new ? "START" : "RESUME") : ""), _sidebarVector, Color.Green);
 
             SpriteBatch.End();
 

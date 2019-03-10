@@ -17,17 +17,11 @@ namespace DigDugComp376
 			Dead
 		}
 
-		internal State CurrentState = Walking;
-
-		const State Walking = State.Walking,
-					Ghost = State.Ghost,
-					Dragon = State.Dragon,
-					Growing = State.Growing,
-					Dead = State.Dead;
+		internal State CurrentState = State.Walking;
 
 		readonly bool _isFygar;
 
-		readonly int _monsterSpeed,
+		readonly byte _monsterSpeed,
 					 _y,
 					 _multiplier;
 
@@ -46,7 +40,7 @@ namespace DigDugComp376
 		readonly Hose _hose;
 		readonly DigDug _digDug;
 
-		int _growCount;
+		byte _growCount;
 
 		byte[,] _level;
 
@@ -55,7 +49,7 @@ namespace DigDugComp376
 		Vector2 _lastSpeed,
 				_digDugLastKnownPosition;
 
-		internal Monster(int x, int y, bool isFygar, int multiplier, int monsterSpeed) : base(isFygar ? Game1.FygarTexture : Game1.PookaTexture)
+		internal Monster(int x, byte y, bool isFygar, byte multiplier, byte monsterSpeed) : base(isFygar ? Game1.FygarTexture : Game1.PookaTexture)
 		{
 			_isFygar = isFygar;
 			_monsterSpeed = monsterSpeed;
@@ -84,46 +78,46 @@ namespace DigDugComp376
 
 			switch (CurrentState)
 			{
-				case Dead when _deadWatch.ElapsedMilliseconds >= 1000:
+				case State.Dead when _deadWatch.ElapsedMilliseconds >= 1000:
 					Visible = false;
 					_deadWatch.Stop();
 					break;
-				case Walking when fireWatchElapsed >= RandomNext(10000, 20000) && _isFygar:
+				case State.Walking when fireWatchElapsed >= Random.Next(10000, 20000) && _isFygar:
 					Fire.Visible = true;
 					_walkWatch.Reset();
-					CurrentState = Dragon;
+					CurrentState = State.Dragon;
 					Fire.Position = new Vector2(x + (Flip ? 56 : -56), y);
 					_fireWatch.Restart();
 					break;
-				case Walking when _ghostWatch.ElapsedMilliseconds >= RandomNext(10000, 20000) && _game1Stopwatch.ElapsedMilliseconds >= 5000:
+				case State.Walking when _ghostWatch.ElapsedMilliseconds >= Random.Next(10000, 20000) && _game1Stopwatch.ElapsedMilliseconds >= 5000:
 					_walkWatch.Reset();
 					Source.X = 0;
 					Source.Y = 0;
-					CurrentState = Ghost;
+					CurrentState = State.Ghost;
 					_ghostWatch.Reset();
 					_timeAsGhost.Start();
 					break;
-				case Ghost when !(Math.Abs(x % 56) > 0 || Math.Abs(y % 56) > 0) && _level[(int) x / 56, (int) y / 56] == 0 && _timeAsGhost.ElapsedMilliseconds >= 1000:
+				case State.Ghost when !(Math.Abs(x % 56) > 0 || Math.Abs(y % 56) > 0) && _level[(int) x / 56, (int) y / 56] == 0 && _timeAsGhost.ElapsedMilliseconds >= 1000:
 					_timeAsGhost.Reset();
 					Source.X = 56;
-					CurrentState = Walking;
+					CurrentState = State.Walking;
 					_walkWatch.Start();
 					_ghostWatch.Start();
 					break;
-				case Dragon when fireWatchElapsed >= 2000:
+				case State.Dragon when fireWatchElapsed >= 2000:
 					Fire.Visible = false;
 					_fireWatch.Restart();
 					_walkWatch.Start();
-					CurrentState = Walking;
+					CurrentState = State.Walking;
 					break;
-				case Walking when Collides(_hose):
+				case State.Walking when Collides(_hose):
 					_walkWatch.Reset();
 					_lastState = CurrentState;
 					Source.Y = 0;
-					CurrentState = Growing;
+					CurrentState = State.Growing;
 					_stopwatch.Start();
 					break;
-				case Growing when _stopwatch.ElapsedMilliseconds >= 1000:
+				case State.Growing when _stopwatch.ElapsedMilliseconds >= 1000:
 					if (Collides(_hose)) ++_growCount;
 					else if (_growCount > 0) --_growCount;
 
@@ -138,7 +132,7 @@ namespace DigDugComp376
 							break;
 					}
 
-					Source.X = CurrentState == Ghost ? 0 : 56 * (_growCount + 1);
+					Source.X = CurrentState == State.Ghost ? 0 : 56 * (_growCount + 1);
 
 					_stopwatch.Restart();
 					break;
@@ -147,20 +141,20 @@ namespace DigDugComp376
 			UpdateMovement(x, y);
 		}
 
-		internal void Die(int method)
+		internal void Die(byte method)
 		{
 			_deadWatch.Start();
 			++Game1.DeadMonsters;
-			CurrentState = Dead;
-			Game1.Score += _multiplier * method * (_y + 1) * 10;
+			CurrentState = State.Dead;
+			Game1.Score += (ushort) (_multiplier * method * (_y + 1) * 10);
 		}
 
 		internal void Reset()
 		{
-			if (CurrentState == Dead) return;
+			if (CurrentState == State.Dead) return;
 
 			Position = _originalPosition;
-			CurrentState = Walking;
+			CurrentState = State.Walking;
 			Source = _rectangle;
 			Flip = false;
 			Fire.Flip = false;
@@ -182,7 +176,7 @@ namespace DigDugComp376
 
 		void UpdateMovement(float x, float y)
 		{
-			if (CurrentState != Ghost)
+			if (CurrentState != State.Ghost)
 			{
 				var dp = _digDug.Position;
 
@@ -191,7 +185,7 @@ namespace DigDugComp376
 
 			switch (CurrentState)
 			{
-				case Ghost:
+				case State.Ghost:
 					var (dx, dy) = _digDugLastKnownPosition;
 
 					var monsterSpeed2 = _monsterSpeed / 2f;
@@ -211,7 +205,7 @@ namespace DigDugComp376
 					if (dy > y) Position.Y += monsterSpeed2;
 					else if (dy < y) Position.Y -= monsterSpeed2;
 					break;
-				case Walking:
+				case State.Walking:
 					if (Math.Abs(x % 56) > 0 || Math.Abs(y % 56) > 0) Position += _lastSpeed;
 
 					else
@@ -223,7 +217,7 @@ namespace DigDugComp376
 
 						while (!choose)
 						{
-							switch (RandomNext(0, 4))
+							switch (Random.Next(0, 4))
 							{
 								case 0 when Math.Abs(x) > 0 && _level[x1 - 1, y1] == 0:
 									Position.X -= _monsterSpeed;
