@@ -4,6 +4,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DigDugComp376", "DigDugComp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigDugComp376.Desktop", "DigDugComp376.Desktop\DigDugComp376.Desktop.csproj", "{5FCAEC21-FA9F-4FC2-9215-DE2C051C90C4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ECC5980C-1F1E-4A04-8BB5-9ACD6FDFDF03}"
+	ProjectSection(SolutionItems) = preProject
+		README.txt = README.txt
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AnyCPU = Debug|AnyCPU
