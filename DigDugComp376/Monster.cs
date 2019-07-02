@@ -31,7 +31,7 @@ namespace DigDugComp376
 						   _timeAsGhost = new Stopwatch(),
 						   _walkWatch = new Stopwatch(),
 						   _deadWatch = new Stopwatch(),
-						   _game1Stopwatch = Game1.Stopwatch;
+						   _game1Stopwatch = MainGame.Stopwatch;
 
 		readonly Rectangle _rectangle = new Rectangle(56, 0, 56, 56);
 
@@ -49,7 +49,7 @@ namespace DigDugComp376
 		Vector2 _lastSpeed,
 				_digDugLastKnownPosition;
 
-		internal Monster(int x, byte y, bool isFygar, byte multiplier, byte monsterSpeed) : base(isFygar ? Game1.FygarTexture : Game1.PookaTexture)
+		internal Monster(int x, byte y, bool isFygar, byte multiplier, byte monsterSpeed) : base(isFygar ? MainGame.FygarTexture : MainGame.PookaTexture)
 		{
 			_isFygar = isFygar;
 			_monsterSpeed = monsterSpeed;
@@ -60,7 +60,7 @@ namespace DigDugComp376
 			Position = _originalPosition;
 			Source = _rectangle;
 
-			_digDug = Game1.DigDug;
+			_digDug = MainGame.DigDug;
 			_hose = _digDug.Hose;
 			_digDugLastKnownPosition = _digDug.Position;
 
@@ -72,7 +72,7 @@ namespace DigDugComp376
 			if (!IsVisible) return;
 
 			var (x, y) = Position;
-			_level = Game1.Level;
+			_level = MainGame.Level;
 
 			var fireWatchElapsed = _fireWatch.ElapsedMilliseconds;
 
@@ -144,9 +144,9 @@ namespace DigDugComp376
 		internal void Die(byte method)
 		{
 			_deadWatch.Start();
-			++Game1.DeadMonsters;
+			++MainGame.DeadMonsters;
 			CurrentState = State.Dead;
-			Game1.Score += (ushort) (_multiplier * method * (_y + 1) * 10);
+			MainGame.Score += (ushort) (_multiplier * method * (_y + 1) * 10);
 		}
 
 		internal void Reset()

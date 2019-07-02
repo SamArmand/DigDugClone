@@ -10,7 +10,7 @@ namespace DigDugComp376
 	/// <summary>
 	/// This is the main type for the game.
 	/// </summary>
-	sealed class Game1 : Game
+	sealed class MainGame : Game
 	{
 		internal static byte[,] Level;
 
@@ -56,7 +56,7 @@ namespace DigDugComp376
 
 		Rock[] _rocks;
 
-        internal Game1()
+        internal MainGame()
 		{
 			_new = true;
 			_pause = true;

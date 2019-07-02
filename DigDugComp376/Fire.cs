@@ -4,7 +4,7 @@ namespace DigDugComp376
 {
     sealed class Fire : Sprite
     {
-		internal Fire() : base(Game1.FireTexture) => Source = new Rectangle(0, 0, 56, 56);
+		internal Fire() : base(MainGame.FireTexture) => Source = new Rectangle(0, 0, 56, 56);
 
 		internal override void Update() => throw new System.NotImplementedException();
 	}

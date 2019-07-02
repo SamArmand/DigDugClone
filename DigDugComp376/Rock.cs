@@ -30,7 +30,7 @@ namespace DigDugComp376
 
 		byte _y;
 
-        internal Rock(byte x, byte y) : base(Game1.RockTexture)
+        internal Rock(byte x, byte y) : base(MainGame.RockTexture)
         {
             _nextValue = (ushort)Random.Next(2000, 4000);
             IsVisible = true;
@@ -50,7 +50,7 @@ namespace DigDugComp376
 
             switch (CurrentState)
             {
-                case State.Stationary when Game1.Level[_x, _y + 1] == 0:
+                case State.Stationary when MainGame.Level[_x, _y + 1] == 0:
                     CurrentState = State.Rumbling;
                     _isRumbling = false;
                     ++Position.X;
@@ -75,7 +75,7 @@ namespace DigDugComp376
                     _stopwatch.Stop();
                     _stopwatch.Reset();
                     break;
-                case State.Falling when Game1.Level[_x, _y + 1] == 0:
+                case State.Falling when MainGame.Level[_x, _y + 1] == 0:
                     if (!(Math.Abs((Position.Y += 4) % 56) > 0)) ++_y;
                     break;
                 case State.Falling:

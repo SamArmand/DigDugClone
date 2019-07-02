@@ -37,7 +37,7 @@ namespace DigDugComp376
 
 		Direction _direction;
 
-		internal DigDug() : base(Game1.DigDugTexture)
+		internal DigDug() : base(MainGame.DigDugTexture)
         {
             OriginalPosition = new Vector2(StartPositionX,StartPositionY);
             IsVisible = true;

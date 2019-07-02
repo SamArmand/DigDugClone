@@ -4,7 +4,7 @@ namespace DigDugComp376
 {
 	sealed class Hose : Sprite
     {
-		internal Hose() : base(Game1.HoseTexture)
+		internal Hose() : base(MainGame.HoseTexture)
 		{
 		}
 
