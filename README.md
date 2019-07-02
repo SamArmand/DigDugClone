@@ -11,7 +11,7 @@ To run the game, you must have MonoGame installed.
 - Two levels.
 - Two lives.
 - Dig Dug's hose weapon.
-- Fygar and Pookah enemies.
+- Fygar and Pooka enemies.
 - Ghost mode for enemies. Enemies will move to the player's last position when ghost mode was activated.
 - Falling rocks that can kill Dig Dug and solid enemies.
 
