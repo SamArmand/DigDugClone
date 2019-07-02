@@ -107,7 +107,7 @@ namespace DigDugComp376
 				Content.Load<Texture2D>("level4tile")
 			};
 
-			DigDugTexture = Content.Load<Texture2D>("digdug_sheet2");
+			DigDugTexture = Content.Load<Texture2D>("digdug");
 			FireTexture = Content.Load<Texture2D>("fire");
 			HoseTexture = Content.Load<Texture2D>("hose");
 			FygarTexture = Content.Load<Texture2D>("fygar");
