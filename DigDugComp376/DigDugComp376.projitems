@@ -18,10 +18,11 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)DigDug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fire.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Game1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MainGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hose.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Monster.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sprite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
   </ItemGroup>
 </Project>

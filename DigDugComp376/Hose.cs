@@ -8,6 +8,6 @@ namespace DigDugComp376
 		{
 		}
 
-		internal void Update() => Visible = Keyboard.GetState().IsKeyDown(Keys.Space);
+		internal override void Update() => IsVisible = Keyboard.GetState().IsKeyDown(Keys.Space);
 	}
 }

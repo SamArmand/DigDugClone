@@ -53,7 +53,7 @@ namespace DigDugComp376
 		{
 			_isFygar = isFygar;
 			_monsterSpeed = monsterSpeed;
-			Visible = true;
+			IsVisible = true;
 			_y = y;
 
 			_originalPosition = new Vector2(x * 56, y * 56);
@@ -67,9 +67,9 @@ namespace DigDugComp376
 			_multiplier = multiplier;
 		}
 
-		internal void Update()
+		internal override void Update()
 		{
-			if (!Visible) return;
+			if (!IsVisible) return;
 
 			var (x, y) = Position;
 			_level = Game1.Level;
@@ -79,14 +79,14 @@ namespace DigDugComp376
 			switch (CurrentState)
 			{
 				case State.Dead when _deadWatch.ElapsedMilliseconds >= 1000:
-					Visible = false;
+					IsVisible = false;
 					_deadWatch.Stop();
 					break;
 				case State.Walking when fireWatchElapsed >= Random.Next(10000, 20000) && _isFygar:
-					Fire.Visible = true;
+					Fire.IsVisible = true;
 					_walkWatch.Reset();
 					CurrentState = State.Dragon;
-					Fire.Position = new Vector2(x + (Flip ? 56 : -56), y);
+					Fire.Position = new Vector2(x + (IsFlipped ? 56 : -56), y);
 					_fireWatch.Restart();
 					break;
 				case State.Walking when _ghostWatch.ElapsedMilliseconds >= Random.Next(10000, 20000) && _game1Stopwatch.ElapsedMilliseconds >= 5000:
@@ -105,7 +105,7 @@ namespace DigDugComp376
 					_ghostWatch.Start();
 					break;
 				case State.Dragon when fireWatchElapsed >= 2000:
-					Fire.Visible = false;
+					Fire.IsVisible = false;
 					_fireWatch.Restart();
 					_walkWatch.Start();
 					CurrentState = State.Walking;
@@ -156,9 +156,9 @@ namespace DigDugComp376
 			Position = _originalPosition;
 			CurrentState = State.Walking;
 			Source = _rectangle;
-			Flip = false;
-			Fire.Flip = false;
-			Fire.Visible = false;
+			IsFlipped = false;
+			Fire.IsFlipped = false;
+			Fire.IsVisible = false;
 			_stopwatch.Reset();
 			_fireWatch.Reset();
 			_ghostWatch.Reset();
@@ -193,14 +193,14 @@ namespace DigDugComp376
 					if (dx > x)
 					{
 						Position.X += monsterSpeed2;
-						Flip = true;
-						Fire.Flip = true;
+						IsFlipped = true;
+						Fire.IsFlipped = true;
 					}
 					else if (dx < x)
 					{
 						Position.X -= monsterSpeed2;
-						Flip = false;
-						Fire.Flip = false;
+						IsFlipped = false;
+						Fire.IsFlipped = false;
 					}
 					if (dy > y) Position.Y += monsterSpeed2;
 					else if (dy < y) Position.Y -= monsterSpeed2;
@@ -255,13 +255,13 @@ namespace DigDugComp376
 
 							if (_lastSpeed.X > 0)
 							{
-								Flip = true;
-								Fire.Flip = true;
+								IsFlipped = true;
+								Fire.IsFlipped = true;
 							}
 							else if (_lastSpeed.X < 0)
 							{
-								Flip = false;
-								Fire.Flip = false;
+								IsFlipped = false;
+								Fire.IsFlipped = false;
 							}
 						}
 					}

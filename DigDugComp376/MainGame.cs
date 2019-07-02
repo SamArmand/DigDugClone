@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace DigDugComp376
 {
 	/// <summary>
-	/// This is the main type for your game
+	/// This is the main type for the game.
 	/// </summary>
 	sealed class Game1 : Game
 	{
@@ -31,9 +31,10 @@ namespace DigDugComp376
 
 		internal static byte DeadMonsters;
 
-		const byte PookaMultiplier = 1,
-				  FygarMultiplier = 2;
-			
+		const byte PookaMultiplier = Constants.PookaMultiplier,
+				   FygarMultiplier = Constants.FygarMultiplier;
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0069:Disposable fields should be disposed", Justification = "It is disposed in the Unload content method.")]
 		readonly GraphicsDeviceManager _graphicsDeviceManager;
 
 		readonly Vector2 _sidebarVector = new Vector2(1064, 56);
@@ -226,7 +227,7 @@ namespace DigDugComp376
 					_pause = true;
 
 					DigDug.Position = DigDug.OriginalPosition;
-					DigDug.Hose.Visible = false;
+					DigDug.Hose.IsVisible = false;
 
 					foreach (var rock in _rocks) rock.Reset();
 
@@ -293,6 +294,9 @@ namespace DigDugComp376
             base.Draw(gameTime);
         }
 
+		/// <summary>
+		/// Resets the level to its original state.
+		/// </summary>
 		static void ResetLevel() => Level = new byte[,] {
 														   {0,1,1,1,2,2,2,3,3,3,4,4,4,4},
 														   {0,1,0,0,0,0,2,3,3,3,4,4,4,4},

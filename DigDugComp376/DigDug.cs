@@ -19,10 +19,10 @@ namespace DigDugComp376
 			Right
 		}
 
-		const byte Speed = 2;
+		const byte Speed = Constants.Speed;
 
-		const short StartPositionX = 504,
-					StartPositionY = 336;
+		const short StartPositionX = Constants.StartPositionX,
+					StartPositionY = Constants.StartPositionY;
 
 		readonly Stopwatch _stopwatch = new Stopwatch();
 
@@ -40,13 +40,13 @@ namespace DigDugComp376
 		internal DigDug() : base(Game1.DigDugTexture)
         {
             OriginalPosition = new Vector2(StartPositionX,StartPositionY);
-            Visible = true;
+            IsVisible = true;
             Source = _rectangleLeft;
             _stopwatch.Start();
             Position = new Vector2(StartPositionX, StartPositionY);
         }
 
-        internal void Update()
+        internal override void Update()
         {
 			var keyboardState = Keyboard.GetState();
 
@@ -162,7 +162,7 @@ namespace DigDugComp376
 
         internal void Reset()
         {
-            Hose.Visible = false;
+            Hose.IsVisible = false;
             Position.X = StartPositionX;
             Position.Y = StartPositionY;
             Source = _rectangleLeft;
